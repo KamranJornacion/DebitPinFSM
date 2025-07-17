@@ -1,0 +1,1 @@
+typedef uvm_sequencer #(encoder_transaction) encoder_sequencer;
