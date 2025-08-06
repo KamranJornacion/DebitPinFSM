@@ -1,5 +1,5 @@
 `ifndef cycke
-    `define cycle 10
+    `define cycle 250
 `endif
 
 
@@ -57,9 +57,11 @@ module top();
         $dumpfile("dump.vcd");
         $dumpvars(1);
         $dumpvars(0,dut_HL);
-      
-        watchLED();
 
+        //Tests if LED will hold for entire cycle
+        watchLED();
+        
+        //Tests how module responds to randomly timed resets
         resetLED();
       
         $finish;
@@ -67,4 +69,3 @@ module top();
 
 
 endmodule
-// Works but the random reset is giving me behaviour that seems sus. Need to review how waveforms work in sumulation
