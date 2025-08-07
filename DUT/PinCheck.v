@@ -3,15 +3,14 @@
 module PinCheck #(parameter passkey = 4'b1010)(
     input [1:0] digit,
     input submit, reset, clk,
-    output reg waiting, correct, incorrect,approved,bug
+    output reg waiting, correct, incorrect,bug
 );
     reg [2:0] state;
-    reg counter;
-	 reg update,verify;
-	 reg [2:0] dig_count;
-	 reg [7:0] password;
-	 reg firstDigit,secondDigit;
-	 reg [1:0]right_wrong;
+	reg update,verify;
+	reg [2:0] dig_count;
+	reg [7:0] password;
+	reg firstDigit,secondDigit;
+	reg [1:0]right_wrong;
 	 
 //Instantiate LED holding
 	 HoldLED holdLED(
@@ -59,7 +58,6 @@ module PinCheck #(parameter passkey = 4'b1010)(
 				waiting<=1;
 				state <= update;
 				verify<=0;
-				approved<=0;
 			end
 			1:begin//Digit read state
 				if(dig_count==4) begin//if all digits are read, move to next state
@@ -87,7 +85,6 @@ module PinCheck #(parameter passkey = 4'b1010)(
 				right_wrong[0]<=1;
 				correct<=1;
 				state<=5;
-				approved<=1;
 				
 			end
 			

@@ -1,4 +1,4 @@
-`ifndef cycke
+`ifndef cycle
     `define cycle 250
 `endif
 
