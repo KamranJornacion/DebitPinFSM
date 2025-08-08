@@ -35,6 +35,15 @@ module top();
         .bug(bug)
     );
 
+    function automatic logic [1:0] encode (input logic [3:0] in);
+        casez(in)
+            4'b1???:encode = 2'd3;
+            4'b01??:encode = 2'd2;
+            4'b001?:encode = 2'd1;
+            4'b0000:encode = 2'd0;
+            default: encode = 2'bxx;
+        endcase
+    endfunction
 
     task DigitSubmission();//implement this testbench
         static bit [3:0] allowed_digits [0:3];
@@ -63,10 +72,17 @@ module top();
                         submit = 1;
                     @(negedge clk);
                         submit = 0;
+                    //allow pincheck logic to update
+                    repeat(2) begin
+                        @(negedge clk);
+                    end
                     //observe statemachine progression
                     $display("T=%0t,Sumbit = %0b,digits=%0b",$time,submit,digits);
                 end
-                assert(password ==debitpin.pinchk.password);
+                assert(encode(password[15:12]) ==debitpin.pinchk.password[7:6]);
+                assert(encode(password[11:8]) ==debitpin.pinchk.password[5:4]);
+                assert(encode(password[7:4]) ==debitpin.pinchk.password[3:2]);
+                assert(encode(password[3:0]) ==debitpin.pinchk.password[1:0]);
             end
         end
 
