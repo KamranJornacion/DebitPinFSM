@@ -10,13 +10,13 @@ module PinCheck #(parameter passkey = 4'b1010)(
 	reg [2:0] dig_count;
 	reg [7:0] password;
 	reg firstDigit,secondDigit;
-	reg [1:0]right_wrong;
+	reg right_wrong_in,right_wrong_out;
 	 
 //Instantiate LED holding
 	 HoldLED holdLED(
 		.clk(clk),
-		.reset(right_wrong[0]),
-		.LED(right_wrong[1])
+		.reset(right_wrong_in),
+		.LED(right_wrong_out)
 	 );
 
  //state reset
@@ -82,21 +82,21 @@ module PinCheck #(parameter passkey = 4'b1010)(
 			end
 			
 			3:begin//correct password
-				right_wrong[0]<=1;
+				right_wrong_in<=1;
 				correct<=1;
 				state<=5;
 				
 			end
 			
 			4:begin//incorrect password
-				right_wrong[0]<=1;
+				right_wrong_in<=1;
 				incorrect<=1;
 				state<=5;
 			end
 			
 			5:begin//Holding LED
-				right_wrong[0]<=0;
-				if(right_wrong[1]!=1) begin
+				right_wrong_in<=0;
+				if(right_wrong_out!=1) begin
 					state<=0;
 					correct<=0;
 					incorrect<=0;

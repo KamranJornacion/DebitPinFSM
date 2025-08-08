@@ -1,7 +1,7 @@
 
 
 module DebitPin #(parameter passkey = 4'b1010)(
-    input digit_switches[3:0],
+    input [3:0] digit_switches,
     input clk, reset, submit,
     output reg waiting, correct, incorrect,bug
 );
