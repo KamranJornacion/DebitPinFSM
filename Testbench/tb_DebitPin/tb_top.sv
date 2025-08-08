@@ -18,6 +18,7 @@
 module top();
 
     parameter passkey = `passkey;
+   
 
     logic [3:0] digits;
     logic clk, reset, submit, waiting, correct, incorrect, bug;
@@ -79,7 +80,8 @@ module top();
 
     initial begin
         $dumpfile("dump.vcd");
-        $dumpvars(1);
+        $dumpvars();
+        $dumpvars(0,debitpin.pinchk);
 
         @(negedge clk);
             reset = 1;
@@ -93,3 +95,6 @@ module top();
     end
 
 endmodule
+
+//TODO: Correctly stores digit in top_level password shhift register- I think the submission timeline doesn't account for delay to the fsm as it doesnt update immediately in the pincheck so i need to dive into that.
+//Verify clock timing on pincheck to observe if its behaving as desired based on stimulus
