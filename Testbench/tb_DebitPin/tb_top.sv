@@ -45,6 +45,16 @@ module top();
         endcase
     endfunction
 
+     function automatic logic [3:0] decode (input logic [1:0] in);
+        casez(in)
+            2'd3:decode = 4'b1000;
+            2'd2:decode = 4'b0100;
+            2'd1:decode = 4'b0010;
+            2'd0:decode = 4'b0001;
+            default: decode = 4'bx;
+        endcase
+    endfunction
+
     task DigitSubmission();//implement this testbench
         static bit [3:0] allowed_digits [0:3];
         logic [15:0] password;
@@ -92,6 +102,47 @@ module top();
     endtask
 
 
+    task PasswordVerification();
+    begin
+            
+            password[15:12] = decode(passkey[7:6]);
+            password[11:8] = decode(passkey[5:4]);
+            password[7:4] = decode(passkey[3:2]);
+            password[3:0] = decode(passkey[1:0]);
+
+            repeat(4) @(posedge clk) begin
+                //randomize passkey selection
+                bit [3:0] digit;
+
+
+                //submit random digit
+                digits = password[15:12];
+                password = {password[11:0],4'b0};
+
+                @(posedge clk);
+                    submit = 1;
+                @(negedge clk);
+                    submit = 0;
+                //allow pincheck logic to update
+                repeat(2) begin
+                    @(negedge clk);
+                end
+                //observe statemachine progression
+                $display("T=%0t,passowrd = %0b,encode=%0b",$time,password[15:12],encode(password[15:12]));
+                
+            end
+            assert(passowrd==16'b0);
+            assert(debitpin.pinchk.dig_count==4);
+            assert(debitpin.pinchk.state==3);//Modify this to assert one clock edge after veify ==1
+            assert(debitpin.pinchk.state==5);//Modify this to assert after prev assertion
+            assert(correct==1);//Assert this in paralell to prev
+            assert(incorrect==0);//Assert this in paralell to prev
+            assert(waiting==0);//Assert this in paralell to prev..maybe
+            assert(bug==0);//Assert this in paralell to prev
+                
+        end
+    endtask
+
 
     initial begin
         clk = 0;
@@ -116,4 +167,4 @@ module top();
 
 endmodule
 
-//TODO: "Seems to be error with assertions and the logic seems correct, need to check how encode function acts on password and if assertions are wrong- consider adding print statements"
+//TODO: Need to verify password verification pipeline. Correct password should be passed and the corr3ect flagd should arise in the desired order. Then follow the incorrect pipeline. Then random test passwords and check their pipelines. Finally create reset testbench after understanding desired reset logic.
