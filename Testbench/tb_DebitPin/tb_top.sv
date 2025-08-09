@@ -40,7 +40,7 @@ module top();
             4'b1???:encode = 2'd3;
             4'b01??:encode = 2'd2;
             4'b001?:encode = 2'd1;
-            4'b0000:encode = 2'd0;
+            4'b0001:encode = 2'd0;
             default: encode = 2'bxx;
         endcase
     endfunction
@@ -55,7 +55,7 @@ module top();
             allowed_digits[2] = 4'b0010;
             allowed_digits[3] = 4'b0001;
             //for each digit
-            repeat(24) begin
+            repeat(24) @(posedge clk) begin
                 password = 16'b0;
 
                 repeat(4) begin
@@ -77,7 +77,10 @@ module top();
                         @(negedge clk);
                     end
                     //observe statemachine progression
-                    $display("T=%0t,Sumbit = %0b,digits=%0b",$time,submit,digits);
+                    $display("T=%0t,passowrd = %0b,encode=%0b",$time,password[15:12],encode(password[15:12]));
+                    $display("passowrd = %0b,encode=%0b",password[11:8],encode(password[11:8]));
+                    $display("passowrd = %0b,encode=%0b",password[7:4],encode(password[7:4]));
+                    $display("passowrd = %0b,encode=%0b",password[3:0],encode(password[3:0]));
                 end
                 assert(encode(password[15:12]) ==debitpin.pinchk.password[7:6]);
                 assert(encode(password[11:8]) ==debitpin.pinchk.password[5:4]);
@@ -87,6 +90,7 @@ module top();
         end
 
     endtask
+
 
 
     initial begin
@@ -112,5 +116,4 @@ module top();
 
 endmodule
 
-//TODO: Correctly stores digit in top_level password shhift register- I think the submission timeline doesn't account for delay to the fsm as it doesnt update immediately in the pincheck so i need to dive into that.
-//Verify clock timing on pincheck to observe if its behaving as desired based on stimulus
+//TODO: "Seems to be error with assertions and the logic seems correct, need to check how encode function acts on password and if assertions are wrong- consider adding print statements"
