@@ -101,9 +101,10 @@ module top();
 
     endtask
 
-
+   
     task PasswordVerification();
     begin
+            logic [15:0] password;
             
             password[15:12] = decode(passkey[7:6]);
             password[11:8] = decode(passkey[5:4]);
@@ -131,14 +132,20 @@ module top();
                 $display("T=%0t,passowrd = %0b,encode=%0b",$time,password[15:12],encode(password[15:12]));
                 
             end
-            assert(passowrd==16'b0);
+            assert(password==0);        
             assert(debitpin.pinchk.dig_count==4);
-            assert(debitpin.pinchk.state==3);//Modify this to assert one clock edge after veify ==1
-            assert(debitpin.pinchk.state==5);//Modify this to assert after prev assertion
-            assert(correct==1);//Assert this in paralell to prev
-            assert(incorrect==0);//Assert this in paralell to prev
-            assert(waiting==0);//Assert this in paralell to prev..maybe
-            assert(bug==0);//Assert this in paralell to prev
+
+            @(posedge clk);
+                assert(debitpin.pinchk.verify == 1);    
+            @(posedge clk); 
+                assert(debitpin.pinchk.state==3);
+            @(posedge clk); 
+                assert(debitpin.pinchk.state==5);
+                assert(correct==1);
+                assert(incorrect ==0);
+                assert(bug==0);
+            
+            // assert(waiting==0);//Assert this in paralell to prev..maybe
                 
         end
     endtask
@@ -159,12 +166,16 @@ module top();
         @(negedge clk);
             reset = 0;
 
-        DigitSubmission();
+        // DigitSubmission();
 
+
+        PasswordVerification();
 
         $finish();
     end
 
 endmodule
 
-//TODO: Need to verify password verification pipeline. Correct password should be passed and the corr3ect flagd should arise in the desired order. Then follow the incorrect pipeline. Then random test passwords and check their pipelines. Finally create reset testbench after understanding desired reset logic.
+//TODO: Testbench for pinverify low key is correct but the state update mechanism is convoluted and could be simplified. Aim to do so next time. Specifically
+//The state oscilalted bwteen 0 and 1 and so it creates a cycle delay before it can move on to state 2/3
+//may be an issue may not- but see if i can simplify logic
