@@ -1,5 +1,5 @@
 $date
-	Mon Aug 11 20:37:27 2025
+	Tue Aug 12 19:37:48 2025
 $end
 $version
 	Icarus Verilog
@@ -12,7 +12,7 @@ $var wire 1 ! waiting $end
 $var wire 1 " incorrect $end
 $var wire 1 # correct $end
 $var wire 1 $ bug $end
-$var parameter 4 % passkey $end
+$var parameter 8 % passkey $end
 $var reg 1 & clk $end
 $var reg 4 ' digits [3:0] $end
 $var reg 1 ( reset $end
@@ -31,14 +31,14 @@ $var wire 1 " incorrect $end
 $var wire 2 + digit [1:0] $end
 $var wire 1 # correct $end
 $var wire 1 $ bug $end
-$var parameter 4 , passkey $end
+$var parameter 8 , passkey $end
 $scope module pinchk $end
 $var wire 1 & clk $end
 $var wire 1 ( reset $end
 $var wire 1 ) submit $end
 $var wire 1 - right_wrong_out $end
 $var wire 2 . digit [1:0] $end
-$var parameter 4 / passkey $end
+$var parameter 8 / passkey $end
 $var reg 1 $ bug $end
 $var reg 1 # correct $end
 $var reg 3 0 dig_count [2:0] $end
@@ -49,32 +49,31 @@ $var reg 8 3 password [7:0] $end
 $var reg 1 4 right_wrong_in $end
 $var reg 1 5 secondDigit $end
 $var reg 3 6 state [2:0] $end
-$var reg 1 7 update $end
-$var reg 1 8 verify $end
+$var reg 1 7 verify $end
 $var reg 1 ! waiting $end
 $scope module holdLED $end
 $var wire 1 & clk $end
 $var wire 1 4 reset $end
-$var parameter 32 9 length $end
+$var parameter 32 8 length $end
 $var reg 1 - LED $end
-$var reg 28 : counter [27:0] $end
+$var reg 28 9 counter [27:0] $end
 $upscope $end
 $upscope $end
 $scope module priority_enc $end
-$var wire 4 ; in [3:0] $end
-$var reg 2 < out [1:0] $end
+$var wire 4 : in [3:0] $end
+$var reg 2 ; out [1:0] $end
 $upscope $end
 $upscope $end
 $scope task DigitSubmission $end
-$var reg 16 = password [15:0] $end
-$scope begin $unm_blk_29 $end
-$var reg 4 > digit [3:0] $end
+$var reg 16 < password [15:0] $end
+$scope begin $unm_blk_28 $end
+$var reg 4 = digit [3:0] $end
 $upscope $end
 $upscope $end
 $scope task PasswordVerification $end
+$scope begin $unm_blk_30 $end
+$var reg 16 > password [15:0] $end
 $scope begin $unm_blk_31 $end
-$var reg 16 ? password [15:0] $end
-$scope begin $unm_blk_32 $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -90,20 +89,19 @@ $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b1110111001101011001010000000 9
-b1010 /
-b1010 ,
-b1010 %
+b1110111001101011001010000000 8
+b10100101 /
+b10100101 ,
+b10100101 %
 $end
 #0
 $dumpvars
-bx ?
-b0 >
-bx =
+bx >
+b0 =
 bx <
 bx ;
 bx :
-x8
+bx 9
 x7
 bx 6
 x5
@@ -138,23 +136,28 @@ b0 6
 0&
 #15
 0$
-b0 6
 1!
-08
-b0 0
 07
+b0 0
 b0 3
 1&
 #20
-bx01000100 ?
+b100010000100010 >
 0(
 0&
 #25
-bx010001000000 ?
+b10 +
+b10 .
+b10 ;
+b100001000100000 >
+b100 '
+b100 *
+b100 :
 1&
 #30
 0&
 #35
+b10 1
 12
 1)
 1&
@@ -164,26 +167,24 @@ bx010001000000 ?
 #45
 02
 15
-b0x 3
+b1 3
 1&
 #50
 0&
 #55
-17
+b1 6
 b1 0
 05
-b0xx 3
+b10 3
 1&
 #60
 0&
 #65
-b1 6
-b100010000000000 ?
+b10001000000000 >
 1&
 #70
 0&
 #75
-07
 12
 1)
 1&
@@ -191,36 +192,32 @@ b100010000000000 ?
 0)
 0&
 #85
-b0 6
 02
 15
-b0xxx 3
+b101 3
 1&
 #90
 0&
 #95
-17
 b10 0
 05
-b0xxxx 3
+b1010 3
 1&
 #100
 0&
 #105
-b1 6
-b10 +
-b10 .
-b10 <
-b100000000000000 ?
-b100 '
-b100 *
-b100 ;
+b1 +
+b1 .
+b1 ;
+b10000000000000 >
+b10 '
+b10 *
+b10 :
 1&
 #110
 0&
 #115
-07
-b10 1
+b1 1
 12
 1)
 1&
@@ -228,29 +225,25 @@ b10 1
 0)
 0&
 #125
-b0 6
 02
 15
-b0xxxx1 3
+b10100 3
 1&
 #130
 0&
 #135
-17
 b11 0
 05
-b0xxxx10 3
+b101001 3
 1&
 #140
 0&
 #145
-b1 6
-b0 ?
+b0 >
 1&
 #150
 0&
 #155
-07
 12
 1)
 1&
@@ -258,33 +251,37 @@ b0 ?
 0)
 0&
 #165
-b0 6
 02
 15
-b0xxxx101 3
+b1010010 3
 1&
 #170
 0&
 #175
-17
 b100 0
 05
-bx1010 3
+b10100101 3
 1&
 #180
 0&
 #185
-b1 6
+b0 0
+17
+0!
+b10 6
 1&
 #190
 0&
 #195
-18
-0!
 07
+b11 6
 1&
 #200
 0&
 #205
-b0 6
+b101 6
+1#
+14
 1&
+#210
+0&

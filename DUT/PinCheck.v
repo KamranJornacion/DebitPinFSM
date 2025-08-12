@@ -1,12 +1,12 @@
 
 
-module PinCheck #(parameter passkey = 4'b1010)(
+module PinCheck #(parameter passkey = 8'b10100101)(
     input [1:0] digit,
     input submit, reset, clk,
     output reg waiting, correct, incorrect,bug
 );
     reg [2:0] state;
-	reg update,verify;
+	reg verify;
 	reg [2:0] dig_count;
 	reg [7:0] password;
 	reg firstDigit,secondDigit;
@@ -34,7 +34,6 @@ module PinCheck #(parameter passkey = 4'b1010)(
 		always @(posedge clk) begin
 			if(reset) begin
 				password <= 0;
-				update<=0;
 				dig_count<=0;
 				verify<=0;
 			end else if(firstDigit) begin
@@ -45,7 +44,7 @@ module PinCheck #(parameter passkey = 4'b1010)(
 				password <= {password[6:0],digit_stw[0]};
 				secondDigit<=0;
 				dig_count<= dig_count+1;
-				update<=1;
+				state<=1;
 			end else if (submit) begin
 				firstDigit<=1;
 				digit_stw<=digit;
@@ -59,18 +58,15 @@ module PinCheck #(parameter passkey = 4'b1010)(
 		  case(state)
 			0:begin//Default state
 				waiting<=1;
-				state <= update;
 				verify<=0;
 			end
 			1:begin//Digit read state
 				if(dig_count==4) begin//if all digits are read, move to next state
-					update <= 2;
+					state <= 2;
 					waiting<=0;
 					verify<=1;
-				end else begin
-					update<=0;
-				end
-				state <=update;		
+					dig_count<=0;
+				end 
 			end
 			2:begin//all digits have been read, 
 			//TODO: verified timing logic with timing chart, need to decide what state 2 is.

@@ -1,5 +1,5 @@
 `ifndef passkey
-    `define passkey  4'b1010
+    `define passkey  8'b10100101
 `endif
 
 
@@ -129,24 +129,23 @@ module top();
                     @(negedge clk);
                 end
                 //observe statemachine progression
-                $display("T=%0t,passowrd = %0b,encode=%0b",$time,password[15:12],encode(password[15:12]));
+                $display("T=%0t,passowrd = %0b",$time,password);
                 
             end
             assert(password==0);        
             assert(debitpin.pinchk.dig_count==4);
-
-            @(posedge clk);
-                assert(debitpin.pinchk.verify == 1);    
-            @(posedge clk); 
+            
+            @(negedge clk);
+                assert(debitpin.pinchk.dig_count == 0); 
+                assert(debitpin.pinchk.verify == 1);
+                assert(waiting==0);    
+            @(negedge clk); 
                 assert(debitpin.pinchk.state==3);
-            @(posedge clk); 
+            @(negedge clk); 
                 assert(debitpin.pinchk.state==5);
                 assert(correct==1);
                 assert(incorrect ==0);
                 assert(bug==0);
-            
-            // assert(waiting==0);//Assert this in paralell to prev..maybe
-                
         end
     endtask
 
