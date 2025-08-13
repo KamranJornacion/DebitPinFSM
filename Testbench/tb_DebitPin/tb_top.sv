@@ -149,6 +149,61 @@ module top();
         end
     endtask
 
+     task WrongPasswordVerification();
+    begin
+            logic [15:0] password;
+            logic [7:0] attempt;
+            
+            repeat(24) @(posedge clk) begin
+                
+                do begin 
+                    attempt = $urandom();
+                end while (attempt == passkey);
+
+                password[15:12] = decode(attempt[7:6]);
+                password[11:8] = decode(attempt[5:4]);
+                password[7:4] = decode(attempt[3:2]);
+                password[3:0] = decode(attempt[1:0]);
+
+                repeat(4) @(posedge clk) begin
+                    //randomize passkey selection
+                    bit [3:0] digit;
+
+
+                    //submit random digit
+                    digits = password[15:12];
+                    password = {password[11:0],4'b0};
+
+                    @(posedge clk);
+                        submit = 1;
+                    @(negedge clk);
+                        submit = 0;
+                    //allow pincheck logic to update
+                    repeat(2) begin
+                        @(negedge clk);
+                    end
+                    //observe statemachine progression
+                    $display("T=%0t,passowrd = %0b",$time,password);
+                    
+                end
+            assert(password==0);        
+            assert(debitpin.pinchk.dig_count==4);
+            
+            @(negedge clk);
+                assert(debitpin.pinchk.dig_count == 0); 
+                assert(debitpin.pinchk.verify == 1);
+                assert(waiting==0);    
+            @(negedge clk); 
+                assert(debitpin.pinchk.state==4);
+            @(negedge clk); 
+                assert(debitpin.pinchk.state==5);
+                assert(correct==0);
+                assert(incorrect ==1);
+                assert(bug==0);
+            end
+        end
+    endtask
+
 
     initial begin
         clk = 0;
@@ -168,7 +223,9 @@ module top();
         // DigitSubmission();
 
 
-        PasswordVerification();
+        //PasswordVerification();
+
+        WrongPasswordVerification();
 
         $finish();
     end

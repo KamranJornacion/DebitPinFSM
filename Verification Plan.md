@@ -69,7 +69,8 @@
 |------------------|--------------------|------------------------------------------------|----------------------------------------------|----------------------------------------|
 | TC1              | Reset Test         | Apply reset and observe state and Flags      | `state =` `correct =` `incorrect =` `dig_count =` `bug = 0` | Pass if all values reset correctly    |
 | TC2              | Digit Submission  | Deassert reset, pass a digit to the encoder, submit and observe passkey progression  | `Digit Count = 0` until `Submit = 1` and `firstDigit` then `secondDigit` toggles, then `4` | Pass if passkey flags transitions as expected    |
-| TC3              | Correct Password Test    |                        |        |         |
+| TC3              | Correct Password Test    |   Submit the correct password and ensure states and flags update as desired                     |  `dig count = 4` ->  `dig count = 0` `verify = 1` `waiting = 0` -> `state = 3` -> `state =5` `correct =1`     |   Pass if flags and states update as expected      |
+ TC4              | Inorrect Password Test    |   Submit incorrect passwords and ensure states and flags update as desired                     |  `dig count = 4` ->  `dig count = 0` `verify = 1` `waiting = 0` -> `state = 4` -> `state =5` `incorrect =1`      |   Pass if flags and states update as expected      |
 [//]: <> (Incomplete, continue appending testcases)
 ---
 
