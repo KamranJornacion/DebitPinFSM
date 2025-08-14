@@ -40,12 +40,12 @@ module PinCheck #(parameter passkey = 8'b10100101)(
 				password <= {password[6:0],digit_stw[1]};
 				secondDigit<=1;
 				firstDigit<=0;
-			end else if(secondDigit) begin
+			end else if(secondDigit ) begin
 				password <= {password[6:0],digit_stw[0]};
 				secondDigit<=0;
 				dig_count<= dig_count+1;
 				state<=1;
-			end else if (submit) begin
+			end else if (submit && (state == 0 || state  == 1)) begin
 				firstDigit<=1;
 				digit_stw<=digit;
 
@@ -54,7 +54,7 @@ module PinCheck #(parameter passkey = 8'b10100101)(
 
 
 //fsm logic
-		always @(posedge clk or posedge reset) begin
+		always @(posedge clk) begin
 		  case(state)
 			0:begin//Default state
 				waiting<=1;
@@ -93,14 +93,17 @@ module PinCheck #(parameter passkey = 8'b10100101)(
 				state<=5;
 			end
 			
-			5:begin//Holding LED
+			5:begin//Activate LED
 				right_wrong_in<=0;
+				state<=6;
+			end
+
+			6: begin//Hold LED
 				if(right_wrong_out!=1) begin
 					state<=0;
 					correct<=0;
 					incorrect<=0;
 				end
-					
 			end
 			
 			default:begin
