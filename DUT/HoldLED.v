@@ -1,5 +1,5 @@
 
-module HoldLED #(parameter length= 5)(
+module HoldLED #(parameter length= 250_000_000)(
 	input clk,reset,
 	output reg LED
 	);
