@@ -5,7 +5,6 @@ module HoldLED #(parameter length= 250_000_000)(
 	);
 	
 	reg [27:0] counter;
-	//reg LED;
 	
 	always @(posedge clk)begin
 		if(reset) begin
@@ -21,8 +20,4 @@ module HoldLED #(parameter length= 250_000_000)(
 		end
 		
 	end
-	
-	//assign LED_out = LED;
-	
-	
 endmodule 

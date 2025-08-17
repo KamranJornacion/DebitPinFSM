@@ -214,7 +214,7 @@ module top();
         end
     endtask
 
-    task ResetVerification();//figure out how to sufficiently randomize when reset is called -currnetly this function is baisically  just driving correct and incorrect signals then testing accordingly
+    task ResetVerification();
     begin
             logic [15:0] password;
             logic [7:0] attempt;
@@ -334,4 +334,3 @@ module top();
 
 endmodule
 
-//TODO: Create the random reset testbench! Then maybe add another but I beleive the design is officially verified!!
