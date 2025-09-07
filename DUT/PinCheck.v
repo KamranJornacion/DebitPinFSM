@@ -18,7 +18,7 @@ module PinCheck #(parameter passkey = 8'b10100101)(
 //Instantiate LED holding
 	 HoldLED holdLED(
 		.clk(clk),
-		.reset(right_wrong_in),
+		.reset_n(right_wrong_in),
 		.LED(right_wrong_out)
 	 );
 
